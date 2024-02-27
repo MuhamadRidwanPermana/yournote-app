@@ -56,7 +56,7 @@ export default function EditNote({ notes, setNotes }) {
   };
 
   return (
-    <div className="Container mx-auto px-5 lg:w-1/3 h-screen overflow-auto dark:bg-[#1e1e1e] duration-300">
+    <div className="Container mx-auto px-5 max-w-4xl h-screen overflow-auto dark:bg-[#1e1e1e] duration-300">
       <div className="sticky top-0 z-10 flex justify-between py-5 bg-white dark:bg-[#1e1e1e]">
         <Link to="/">
           <button className="bg-orange-100 hover:duration-300 hover:bg-orange-200 w-10 h-10 rounded-full">
@@ -98,7 +98,7 @@ export default function EditNote({ notes, setNotes }) {
 
         <ReactQuill
           className="relative w-full dark:text-orange-400"
-          placeholder="Write Description Here . . ."
+          placeholder="Description . . ."
           theme="snow"
           modules={modules}
           value={description}
@@ -108,7 +108,7 @@ export default function EditNote({ notes, setNotes }) {
 
       <div className="relative w-full h-9">
         <button
-          className="fixed bottom-28 mb-2 right-28 bg-orange-100 hover:bg-orange-200 hover:text-orange-500 hover:duration-300 text-orange-300 font-normal text-lg w-10 h-10 rounded-full"
+          className="Button-Delete bg-orange-100 hover:bg-orange-200 hover:text-orange-500 hover:duration-300 text-orange-300 font-normal text-lg w-10 h-10 rounded-full"
           onClick={deleteNote}
         >
           <svg
@@ -122,7 +122,7 @@ export default function EditNote({ notes, setNotes }) {
           </svg>
         </button>
         <button
-          className="fixed bottom-28 right-10 bg-orange-100 hover:bg-orange-300 hover:opacity-100 hover:duration-300 hover:text-orange-100 text-orange-400 font-normal text-lg w-14 h-14 rounded-full"
+          className="Button-Create bg-orange-100 hover:bg-orange-300 hover:opacity-100 hover:duration-300 hover:text-orange-100 text-orange-400 font-normal text-lg w-14 h-14 rounded-full"
           onClick={updateNote}
         >
           <svg

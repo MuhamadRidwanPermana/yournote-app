@@ -30,7 +30,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Notes notes={notes} showDrawer={showDrawer} open={open} onClose={onClose} />} />
+          <Route path="/" element={<Notes notes={notes} setNotes={setNotes} showDrawer={showDrawer} open={open} onClose={onClose} />} />
           <Route path="/create" element={<CreateNote showDrawer={showDrawer} setNotes={setNotes} />} />
           <Route path="/edit/:id" element={<EditNote showDrawer={showDrawer} notes={notes} setNotes={setNotes} />} />
           <Route path="/home" element={<Home />} />

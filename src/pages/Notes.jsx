@@ -1,16 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../Components/Navbar";
+import Swal from "sweetalert2";
 
-export default function Notes({ notes, showDrawer, open, onClose }) {
+export default function Notes({ notes, setNotes, showDrawer, open, onClose }) {
   const [text, setText] = useState("");
   const [filteredNotes, setFilteredNotes] = useState(notes);
 
   const Search = () => {
     setFilteredNotes(
       notes.filter((note) => {
-        if (note.title.toLowerCase().includes(text.toLowerCase())) {
+        if (
+          note.description.toLowerCase().includes(text.toLowerCase()) ||
+          note.title.toLowerCase().includes(text.toLowerCase())
+        ) {
           return note;
+        } else {
+          return null;
+
+          // Swal.fire({
+          //   icon: 'error',
+          //   title: 'Oops...',
+          //   text: 'Note Not Found!',
+          //   confirmButtonColor: "#FE9237",
+          //   confirmButtonText: "Oke",
+          // }, );
         }
       })
     );
@@ -18,14 +32,97 @@ export default function Notes({ notes, showDrawer, open, onClose }) {
 
   useEffect(Search, [text]);
 
-  return (
-    <div className="Container dark:bg-[#1e1e1e] duration-300 mx-auto px-5 lg:w-1/3 h-screen overflow-auto">
-      <Navbar onClose={onClose} open={open} showDrawer={showDrawer} />
+  const [showSearchBox, setShowSearchBox] = useState(false);
+  const onSearchBox = () => {
+    setShowSearchBox(!showSearchBox);
+  };
 
-      <div className="flex border border-orange-200 rounded-xl mt-5">
+  const [showCheckBox, setShowCheckBox] = useState(false);
+  const onCheckBox = () => {
+    setShowCheckBox(!showCheckBox);
+  };
+
+  const [selected, setSelected] = useState([]);
+  const handleSelect = (e) => {
+    let isSelected = e.target.checked;
+    let value = e.target.value;
+
+    if (isSelected) {
+      setSelected([...selected, value]);
+      console.log("select");
+    } else {
+      setSelected(selected.filter((item) => item !== value));
+    }
+  };
+
+  const deleteNote = () => {
+    if (selected.length > 0) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "Note will be deleted!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#FE9237",
+        cancelButtonColor: "#aaa",
+        confirmButtonText: "Delete",
+        cancelButtonText: "Cancel",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          setNotes(notes.filter((note) => !selected.includes(note.id)));
+          setSelected([]);
+
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success",
+            confirmButtonText: "Oke",
+            confirmButtonColor: "#FE9237",
+          });
+        } else {
+          setSelected([]);
+        }
+      });
+    } else {
+      Swal.fire({
+        icon: "warning",
+        title: "Oops...",
+        text: "Please select one or more notes to delete",
+        confirmButtonColor: "#FE9237",
+        confirmButtonText: "Oke",
+      });
+    }
+
+    navigate("/");
+  };
+
+  useEffect(() => {
+    setFilteredNotes(notes);
+  }, [notes]);
+
+  const handleCheckAll = () => {
+    if (notes.length === selected.length) {
+      setSelected([]);
+    } else {
+      const selectedNote = notes.map((note) => {
+        return note.id;
+      });
+      setSelected(selectedNote);
+    }
+  };
+
+  const sortNotes = () => {
+    setNotes([...filteredNotes].reverse());
+  };
+
+  return (
+    <div className="Container dark:bg-[#1e1e1e] duration-300 mx-auto px-5 max-w-4xl h-screen overflow-auto">
+      <Navbar onClose={onClose} open={open} showDrawer={showDrawer} />
+      <div className="flex justify-end gap-4 text-orange-300 h-14 items-end">
         <input
           type="text"
-          className="w-full h-14 rounded-xl px-5 focus:outline-none placeholder:text-orange-200 text-orange-400 dark:bg-[#1e1e1e] duration-300"
+          className={`w-full focus:outline-none border-b border-orange-300 placeholder:text-orange-200 placeholder:text-sm text-orange-400 dark:bg-[#1e1e1e] ${
+            showSearchBox ? "" : "hidden"
+          }`}
           placeholder="Search . . ."
           value={text}
           onChange={(e) => {
@@ -33,19 +130,68 @@ export default function Notes({ notes, showDrawer, open, onClose }) {
             Search();
           }}
         />
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="currentColor"
-          className="bi bi-search h-6 m-auto mr-4 text-orange-200"
-          viewBox="0 0 16 16"
+        <button
+          className={`${showCheckBox ? "" : "hidden"}`}
+          onClick={deleteNote}
         >
-          <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-        </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            className="bi bi-trash3 h-5 m-auto text-orange-300"
+            viewBox="0 0 16 16"
+          >
+            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
+          </svg>
+        </button>
+        <button
+          className={`${showCheckBox ? "" : "hidden"}`}
+          onClick={handleCheckAll}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            className="bi bi-ui-checks h-5 m-auto "
+            viewBox="0 0 16 16"
+          >
+            <path d="M7 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zM2 1a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm0 8a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2zm.854-3.646a.5.5 0 0 1-.708 0l-1-1a.5.5 0 1 1 .708-.708l.646.647 1.646-1.647a.5.5 0 1 1 .708.708zm0 8a.5.5 0 0 1-.708 0l-1-1a.5.5 0 0 1 .708-.708l.646.647 1.646-1.647a.5.5 0 0 1 .708.708zM7 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm0-5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5" />
+          </svg>
+        </button>
+        <button onClick={onCheckBox}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            className="bi bi-check2-square h-5 m-auto text-orange-300"
+            viewBox="0 0 16 16"
+          >
+            <path d="M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5z" />
+            <path d="m8.354 10.354 7-7a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0" />
+          </svg>
+        </button>
+        <button onClick={onSearchBox}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            className="bi bi-search h-5 m-auto"
+            viewBox="0 0 16 16"
+          >
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+          </svg>
+        </button>
+        <button onClick={sortNotes}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            className="bi bi-funnel h-5 m-auto"
+            viewBox="0 0 16 16"
+          >
+            <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z" />
+          </svg>
+        </button>
       </div>
 
       {notes.length === 0 ? (
         <>
-          <div className="flex text-center w-full min-h-[calc(100vh-200px)] my-5 ">
+          <div className="duration-300 ease-in-out flex text-center w-full min-h-[calc(100vh-200px)] my-5 overflow-hidden">
             <div className="m-auto h-full w-full">
               <svg
                 className="text-center m-auto w-1/2"
@@ -215,7 +361,7 @@ export default function Notes({ notes, showDrawer, open, onClose }) {
                 />
               </svg>
               <h1 className="mt-5 dark:text-white duration-300">
-                You haven’t written anything here.
+                You haven't written anything here.
               </h1>
               <Link to="/create">
                 <button className="bg-orange-400 hover:bg-orange-500 dark:text-[#1e1e1e] dark:font-semibold text-white font-normal text-lg w-full h-14 mt-5 rounded-xl">
@@ -228,7 +374,7 @@ export default function Notes({ notes, showDrawer, open, onClose }) {
       ) : (
         <>
           <Link to={"/create"}>
-            <button className="fixed bottom-10 right-10 bg-orange-400 hover:bg-orange-500 text-white font-normal text-lg w-14 h-14 rounded-full">
+            <button className="Button-Create bg-orange-400 hover:bg-orange-500 text-white font-normal text-lg w-14 h-14 rounded-full">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
@@ -244,34 +390,69 @@ export default function Notes({ notes, showDrawer, open, onClose }) {
 
       <div className="note__container my-5">
         {filteredNotes.map((note) => (
-          <Link to={`/edit/${note.id}`} className="note">
-            <div
-              key={note.id}
-              className="relative text-start bg-orange-600 bg-opacity-20 w-full h-full p-5 rounded-xl"
-            >
-              <h1 className="text-orange-400 lg:text-xl text-base font-semibold border-b-2 border-orange-400 pb-2">
-                {note.title.length > 10
-                  ? note.title.substring(0, 10) + "..."
-                  : note.title}
-              </h1>
-              <div className="w-full mb-5 pb-3">
-                <h2
-                  className="pt-3 lg:text-base text-xs dark:text-white duration-300"
-                  dangerouslySetInnerHTML={{
-                    __html: note.description.length > 40
-                    ? note.description.substring(0, 40) + "..."
-                    : note.description
-                  }}
-                >
-                </h2>
-              </div>
-              <h5 className="absolute bottom-4 right-4 lg:text-xs text-[8px] text-orange-400">
-                {note.date}
-              </h5>
+          <div key={note.id} className="relative">
+            <div className="absolute w-full h-4">
+              <input
+                type="checkbox"
+                className={`absolute z-10 top-2 right-2 w-full h-fit bg-red-500 ${
+                  showCheckBox ? "" : "hidden"
+                }`}
+                value={note.id}
+                onChange={handleSelect}
+                checked={selected.includes(note.id)}
+              />
             </div>
-          </Link>
+            <Link to={`/edit/${note.id}`} key={note.id} className="note z-1">
+              <div className="relative z-1 text-start bg-orange-600 bg-opacity-20 w-full h-full p-5 rounded-xl">
+                <h1 className="text-orange-400 lg:text-xl text-base font-semibold border-b-2 border-orange-400 pb-2">
+                  {note.title.length > 20
+                    ? note.title.substring(0, 20) + "..."
+                    : note.title}
+                </h1>
+                <div className="w-full mb-5 pb-3">
+                  <h2
+                    className="pt-3 lg:text-base text-xs dark:text-white duration-300"
+                    dangerouslySetInnerHTML={{
+                      __html:
+                        note.description.length > 100
+                          ? note.description.substring(0, 100) + "..."
+                          : note.description,
+                    }}
+                  ></h2>
+                </div>
+                <h5 className="absolute bottom-4 right-4 lg:text-xs text-[8px] text-orange-400">
+                  {note.date}
+                </h5>
+              </div>
+            </Link>
+          </div>
         ))}
       </div>
+
+      {/* {filteredNotes.length === 0 ? ( 
+      <>
+        <div className="flex h-[calc(100vh-200px)] w-full">
+          <div className="relative text-start bg-orange-600 bg-opacity-20 w-52 h-fit p-5 rounded-xl m-auto">
+            <h1 className="text-orange-400 text-3xl font-semibold border-b-2 border-orange-400 pb-2">
+              404
+            </h1>
+            <div className="w-full mb-5 pb-3">
+              <h2 className="pt-3 text-sm dark:text-white duration-300">
+                Note Not Found.
+              </h2>
+            </div>
+            <h5 className="absolute bottom-4 right-4 lg:text-xs text-[8px] text-orange-400">
+              Jan 01, 2024 | 2024
+            </h5>
+          </div>
+        </div>
+      </> 
+      ) : (
+      <>
+      </>
+      )} */}
+
+      <div id="notFound" className="hidden w-96 h-96"></div>
     </div>
   );
 }

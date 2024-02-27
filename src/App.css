@@ -28,6 +28,7 @@ textarea:focus {
 }
 
 .note__container {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
@@ -46,25 +47,26 @@ textarea:focus {
 }
 
 
-.note:nth-child(3) {
+/* .note:nth-child(3) {
   grid-column: 1/3;
-}
+} */
 
 /* .note:nth-child(4) {
   grid-row: 3/5;
 } */
 
-.note:nth-child(6) {
+/* .note:nth-child(6) {
   grid-column: 1/3;
-}
+} */
+
 
 .quill, .quill .ql-container {
   border: none !important;
 }
 
-.ql-editor .ql-blank{
-  padding: 0;
-}
+/* .ql-editor .ql-blank{
+  margin: 100px !important;
+} */
 
 .quill .ql-toolbar {
   color: #fff !important;
@@ -72,12 +74,16 @@ textarea:focus {
   border-color: #ffd6b4 !important;
   border-width: 2px !important;
   border-style: solid !important;
-  max-width: 30rem;
-  margin: 20px auto !important;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  text-align: center;
+  /* padding: 0 !important; */
+  /* width: fit-content;
+  height: fit-content; */
+  /* margin: 0 40px; */
+  /* margin: 20px auto !important; */
+  /* position: fixed;
+  bottom: 1;
+  left: 1;
+  right: 1; */
   
   background-color: rgba(254,146,55, 0.3);
 }
@@ -87,21 +93,187 @@ textarea:focus {
   color: #1e1e1e !important;
 }
 
-.quill > .ql-container > .ql-editor.ql-blank::before{
-  color: #FE9237;
-  opacity: 0.5;
+.quill > .ql-container > .ql-editor.ql-blank::before {
+  color: rgb(255, 137, 41);
+  opacity: 0.4;
+  font-size: 1rem;
+  font-style: normal;
+  margin-left: -10px !important;
 }
 
 .dark .quill > .ql-container > .ql-editor.ql-blank::before{
-  color: #ffcda5;
+  color: #ffce95;
+  opacity: 0.3;
+  font-size: 1rem;
+  font-style: normal;
+  margin-left: -10px !important;
 }
 
 .ql-editor{
   padding: 2rem 10px 10px 5px !important;
 }
 
-@media screen and (max-width: 480px) {
+/* @media screen and (max-width: 480px) {
     .quill .ql-toolbar {
       margin: 20px !important;
   }
+} */
+
+/* .ant-drawer-content-wrapper{
+  position: relative;
+  margin-right: 25rem;
+} */
+
+.Button-Create{
+  z-index: 100;
+  position: fixed;
+  top: 1;
+  left: 1;
+  right: 0;
+  bottom: 0;
+  margin:0 25rem 2.5rem 0;
+}
+
+.Button-Delete{
+  z-index: 100;
+  position: fixed;
+  top: 1;
+  left: 1;
+  right: 0;
+  bottom: 0;
+  margin:0 30rem 2.5rem 0;
+}
+
+input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+}
+
+.swal2-popup {
+  width: 300px;
+  height: auto;
+  border-radius: 10px;
+}
+.dark .swal2-popup {
+  background: #1e1e1e !important;
+  color:#fff !important;
+}
+.swal2-warning {
+  border: 3px solid #FE9237 !important;
+  color: #FE9237 !important;
+}
+
+
+@media screen and (max-width: 1440px) {
+  .Button-Create{
+    margin:0 18rem 2.5rem 0;
+  }
+  .Button-Delete{
+    margin:0 23rem 2.5rem 0;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .Button-Create{
+    margin:0 5rem 2.5rem 0;
+  }
+  .Button-Delete{
+    margin:0 10rem 2.5rem 0;
+  }
+
+  .swal2-popup {
+    width: 300px;
+    height: auto;
+    border-radius: 10px;
+  }
+  .swal2-icon{
+    font-size: 12px !important;
+  }
+  .swal2-title{
+    margin: 0 !important;
+    padding: 5px 0 0 0 !important;
+    font-size: 1rem !important;
+  }
+  .swal2-html-container{
+    margin: 0 !important;
+    padding: 10px 30px 0 30px !important;
+    font-size: 10px !important;
+  }
+  .swal2-actions button{
+    margin-top: 0 !important;
+    border-radius: 7px !important;
+    font-size: 10px !important;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .Button-Create{
+    margin:0 2rem 2.5rem 0;
+  }
+  .Button-Delete{
+    margin:0 7rem 2.5rem 0;
+  }
+
+  .swal2-popup {
+    width: 300px;
+    height: auto;
+    border-radius: 10px;
+  }
+  .swal2-icon{
+    font-size: 12px !important;
+  }
+  .swal2-title{
+    margin: 0 !important;
+    padding: 5px 0 0 0 !important;
+    font-size: 1rem !important;
+  }
+  .swal2-html-container{
+    margin: 0 !important;
+    padding: 10px 30px 0 30px !important;
+    font-size: 10px !important;
+  }
+  .swal2-actions button{
+    margin-top: 0 !important;
+    border-radius: 7px !important;
+    font-size: 10px !important;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .Button-Create{
+    margin:0 2rem 2.5rem 0;
+  }
+  .Button-Delete{
+    margin:0 7rem 2.5rem 0;
+  }
+
+  .swal2-popup {
+    width: 200px;
+    height: auto;
+    border-radius: 10px;
+  }
+  .swal2-icon{
+    font-size: 12px !important;
+  }
+  .swal2-title{
+    margin: 0 !important;
+    padding: 5px 0 0 0 !important;
+    font-size: 1rem !important;
+  }
+  .swal2-html-container{
+    margin: 0 !important;
+    padding: 10px 30px 0 30px !important;
+    font-size: 10px !important;
+  }
+  .swal2-actions button{
+    margin-top: 0 !important;
+    border-radius: 7px !important;
+    font-size: 10px !important;
+  }
+}
+
+@media screen and (max-width: 375px) {
+}
+
+@media screen and (max-width: 320px) {
 }

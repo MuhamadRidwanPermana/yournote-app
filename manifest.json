@@ -3,7 +3,8 @@
   "short_name": "YourNote.",
   "description": "Is a Simple Note Web Application",
   "icons": [{
-      "src": "/icon.png",
+      "src": "/icon-512.png",
+      "sizes": "512x512",
       "type": "image/png"
     },
     {
@@ -12,7 +13,7 @@
       "type": "image/png"
     }
   ],
-  "start_url": "https://yournote-app.vercel.app/",
+  "start_url": "/home",
   "display": "standalone",
   "theme_color": "#1e1e1e",
   "background_color": "#ffffff",

@@ -42,7 +42,7 @@ export default function CreateNote({ setNotes }) {
   };
 
   return (
-    <div className="Container mx-auto px-5 lg:w-1/3 h-screen overflow-auto dark:bg-[#1e1e1e] duration-300">
+    <div className="Container mx-auto px-5 max-w-4xl h-screen overflow-auto dark:bg-[#1e1e1e] duration-300">
       <div className="sticky top-0 z-10 flex justify-between py-5 bg-white dark:bg-[#1e1e1e]">
         <Link to="/">
           <button className="bg-orange-100 hover:bg-orange-200 hover:duration-300 w-10 h-10 rounded-full">
@@ -79,10 +79,9 @@ export default function CreateNote({ setNotes }) {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         ></textarea> */}
-
         <ReactQuill
-          className="relative w-full dark:text-orange-400"
-          placeholder="Write Description Here . . ."
+          className="w-full dark:text-orange-400 text-orange-400"
+          placeholder="Description . . ."
           theme="snow"
           modules={modules}
           value={description}
@@ -92,7 +91,7 @@ export default function CreateNote({ setNotes }) {
 
       <div className="relative w-full h-9">
         <button
-          className="fixed bottom-28 right-10 bg-orange-200 hover:bg-orange-300 hover:opacity-100 hover:duration-300 hover:text-orange-100 text-orange-400 font-normal text-lg w-14 h-14 rounded-full"
+          className="Button-Create bg-orange-200 hover:bg-orange-300 hover:opacity-100 hover:duration-300 hover:text-orange-100 text-orange-400 font-normal text-lg w-14 h-14 rounded-full"
           onClick={createNote}
         >
           <svg
