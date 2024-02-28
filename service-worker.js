@@ -5,6 +5,8 @@ const toCache = [
   'register.js',
   'icon.png',
 ];
+
+let deferredPrompt;
 self.addEventListener("beforeinstallprompt", (e) => {
   e.preventDefault();
   deferredPrompt = e;
