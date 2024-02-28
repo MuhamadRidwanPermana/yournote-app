@@ -3,7 +3,7 @@ const toCache = [
   '/',
   'manifest.json',
   'register.js',
-  'icon-512.png',
+  'icon.png',
 ];
 self.addEventListener("beforeinstallprompt", (e) => {
   e.preventDefault();
