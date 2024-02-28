@@ -16,7 +16,7 @@
       "purpose" : "any"
     }
   ],
-  "start_url": "https://yournote-app.vercel.app/home",
+  "start_url": "https://yournote-app.vercel.app/",
   "display": "standalone",
   "theme_color": "#1e1e1e",
   "background_color": "#ffffff",
